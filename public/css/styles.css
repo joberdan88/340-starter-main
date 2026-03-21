@@ -1,0 +1,237 @@
+/* Root Variables for Consistency */
+:root {
+  --primary-cyan: #3ac1e2;
+  --dark-bg: #333333;
+  --light-border: #cccccc;
+  --font-main: Arial, Helvetica, sans-serif;
+}
+
+/* Reset and Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url("/images/site/checkerboard.jpg");
+  font-family: var(--font-main);
+  margin: 0;
+  padding: 20px 10px;
+  display: flex;
+  justify-content: center;
+}
+
+#wrapper {
+  background-color: white;
+  width: 100%;
+  max-width: 2000px;
+  border: 5px solid var(--primary-cyan);
+  padding: 20px 60px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Header Styles */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+header .site-name {
+  font-size: 2.8em;
+  font-weight: bold;
+  color: #111;
+}
+
+header .account a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.1em;
+}
+
+/* Navigation Styles */
+nav {
+  background-color: var(--dark-bg);
+  margin-bottom: 30px;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+nav ul li {
+  flex: 1;
+}
+
+nav ul li a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 15px 0;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+nav ul li a:hover {
+  background-color: var(--primary-cyan);
+  color: black;
+}
+
+/* Main Content Headings */
+main h1 {
+  font-size: 2.4em;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  margin-bottom: 50px;
+}
+
+.hero-content {
+  position: relative;
+  width: 100%;
+}
+
+.hero-content .car-image {
+  width: 100%;
+  max-width: 1100px;
+  display: block;
+  margin: 0 auto;
+}
+
+.hero-content .features {
+  position: absolute;
+  left: 100px;
+  top: 70px;
+  background-color: rgba(255, 255, 255, 0.75);
+  padding: 30px 45px;
+  z-index: 10;
+  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.hero-content .features h2 {
+  color: var(--primary-cyan);
+  margin: 0 0 15px 0;
+  font-size: 2em;
+  font-weight: normal;
+}
+
+.hero-content .features p {
+  color: var(--primary-cyan);
+  margin: 0 0 8px 0;
+  font-size: 1.3em;
+}
+
+.hero-content .own-today {
+  margin-top: 20px;
+  display: block;
+  width: 180px;
+  cursor: pointer;
+}
+
+/* Content Container (Upgrades & Reviews) */
+.content {
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  margin-top: 40px;
+}
+
+.upgrades,
+.reviews {
+  flex: 1;
+}
+
+.upgrades h2,
+.reviews h2 {
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+/* Upgrades Grid */
+.upgrades .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.upgrades figure {
+  margin: 0;
+  text-align: center;
+}
+
+.upgrades .img-box {
+  background-color: var(--primary-cyan);
+  border: 1px solid #333;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.upgrades .img-box img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.upgrades figcaption a {
+  color: #0000ee;
+  text-decoration: underline;
+  font-size: 1.1em;
+}
+
+/* Reviews Styling */
+.reviews ul {
+  padding-left: 20px;
+  line-height: 1.8;
+  font-size: 1.1em;
+}
+
+.reviews ul li {
+  margin-bottom: 20px;
+}
+
+/* Footer Styling */
+footer {
+  margin-top: 50px;
+  padding-top: 15px;
+  border-top: 1px solid var(--light-border);
+  font-size: 1.1em;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  #wrapper {
+    padding: 10px 20px;
+  }
+
+  .content {
+    flex-direction: column-reverse;
+  }
+
+  .hero-content .features {
+    position: relative;
+    left: 0;
+    top: 0;
+    background-color: #eee;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .hero-content .car-image {
+    width: 100%;
+  }
+
+  nav ul {
+    flex-direction: column;
+  }
+}
