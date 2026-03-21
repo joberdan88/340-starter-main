@@ -3,7 +3,7 @@
  *******************************************/
 const express = require("express")
 const expressLayouts = require("express-ejs-layouts")
-const env = require("dotenv").config()
+const env = require("dotenv").config({ path: ".env.sample" })
 const app = express()
 const path = require("path")
 
@@ -16,10 +16,9 @@ app.set("views", path.join(__dirname, "views"))
 // Static files
 app.use(express.static(path.join(__dirname, "public")))
 
-// Index route
-app.get("/", (req, res) => {
-  res.render("home", { title: "Home" })
-})
+// Routes
+const baseRoutes = require("./routes/base-routes")
+app.use("/", baseRoutes)
 
 // Local Server Information
 const port = process.env.PORT || 3000
@@ -27,4 +26,21 @@ const host = process.env.HOST || "localhost"
 
 app.listen(port, () => {
   console.log(`App listening on ${host}:${port}`)
+})
+
+// 404 Error handler
+app.use((req, res, next) => {
+  const error = new Error("Not Found")
+  error.status = 404
+  next(error)
+})
+
+// General error handler
+app.use((err, req, res, next) => {
+  res.status(err.status || 500)
+  res.render("errors/error", {
+    title: "Error",
+    message: err.message,
+    status: err.status || 500
+  })
 })
