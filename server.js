@@ -20,6 +20,9 @@ app.use(express.static(path.join(__dirname, "public")))
 const baseRoutes = require("./routes/base-routes")
 app.use("/", baseRoutes)
 
+const invRoutes = require("./routes/inventory-routes")
+app.use("/inv", invRoutes)
+
 // Local Server Information
 const port = process.env.PORT || 3000
 const host = process.env.HOST || "localhost"

@@ -234,4 +234,19 @@ footer {
   nav ul {
     flex-direction: column;
   }
-}
+
+  .vehicle-detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .vehicle-detail img {
+    max-width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .vehicle-detail {
+      grid-template-columns: 1fr;
+    }
+  }
