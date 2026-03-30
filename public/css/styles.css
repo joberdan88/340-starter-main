@@ -32,27 +32,40 @@ body {
 /* Header Styles */
 header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  /* título em cima, menu abaixo */
   align-items: center;
   margin-bottom: 25px;
+  position: relative;
 }
 
-header .site-name {
+header .site-title {
   font-size: 2.8em;
   font-weight: bold;
   color: #111;
+  margin-bottom: 20px;
+  /* espaço entre título e menu */
 }
 
-header .account a {
+header .account-link {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+header .account-link a {
   text-decoration: none;
   color: #333;
   font-size: 1.1em;
+  font-weight: bold;
 }
 
 /* Navigation Styles */
 nav {
   background-color: var(--dark-bg);
-  margin-bottom: 30px;
+  width: 100%;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 nav ul {
@@ -60,24 +73,26 @@ nav ul {
   margin: 0;
   padding: 0;
   display: flex;
-}
-
-nav ul li {
-  flex: 1;
+  /* links lado a lado */
+  justify-content: center;
+  /* centraliza os links */
+  gap: 40px;
+  /* espaçamento entre links */
 }
 
 nav ul li a {
   display: block;
   color: white;
   text-decoration: none;
-  padding: 15px 0;
-  text-align: center;
-  font-size: 1.1em;
+  padding: 15px 20px;
+  font-size: 1.2em;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 nav ul li a:hover {
   background-color: var(--primary-cyan);
   color: black;
+  border-radius: 3px;
 }
 
 /* Main Content Headings */
@@ -206,6 +221,7 @@ footer {
   padding-top: 15px;
   border-top: 1px solid var(--light-border);
   font-size: 1.1em;
+  text-align: center;
 }
 
 /* Responsive adjustments */
@@ -233,6 +249,7 @@ footer {
 
   nav ul {
     flex-direction: column;
+    gap: 10px;
   }
 
   .vehicle-detail {
@@ -250,3 +267,4 @@ footer {
       grid-template-columns: 1fr;
     }
   }
+}
