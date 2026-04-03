@@ -6,7 +6,7 @@ const expressLayouts = require("express-ejs-layouts")
 const env = require("dotenv").config({ path: ".env.sample" })
 const app = express()
 const path = require("path")
-const session = require("express-session") // <-- add session support
+const session = require("express-session") // session support
 
 // Middleware first
 app.use(express.urlencoded({ extended: true }))

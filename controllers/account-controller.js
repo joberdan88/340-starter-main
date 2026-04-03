@@ -9,7 +9,9 @@ async function buildLogin(req, res) {
 
 async function buildRegister(req, res) {
     const nav = await utilities.getNav()
-    res.render("account/registration", { title: "Register", nav })
+    const message = req.session.message || null
+    req.session.message = null // clear after showing
+    res.render("account/registration", { title: "Register", nav, message })
 }
 
 async function processRegister(req, res) {
@@ -52,7 +54,9 @@ async function processLogin(req, res) {
     }
 
     if (errors.length > 0) {
-        return res.render("account/login", { title: "Login", nav, errors })
+        // Redirect to register if login fails
+        req.session.message = "Login failed. Please register."
+        return res.redirect("/account/register")
     }
 
     // Store login attempt message in session
