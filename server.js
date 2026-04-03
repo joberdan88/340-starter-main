@@ -6,17 +6,33 @@ const expressLayouts = require("express-ejs-layouts")
 const env = require("dotenv").config({ path: ".env.sample" })
 const app = express()
 const path = require("path")
+const session = require("express-session") // <-- add session support
+
+// Middleware first
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+
+// Configure session
+app.use(session({
+  secret: "superSecretKey", // change to a secure key in production
+  resave: false,
+  saveUninitialized: true
+}))
+
+// Routes
+const accountRoutes = require("./routes/account-routes")
+app.use("/account", accountRoutes)
 
 // View engine
 app.use(expressLayouts)
-app.set("layout", "./layout") // not at views root
+app.set("layout", "layout")
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"))
 
 // Static files
 app.use(express.static(path.join(__dirname, "public")))
 
-// Routes
+// Other routes
 const baseRoutes = require("./routes/base-routes")
 app.use("/", baseRoutes)
 

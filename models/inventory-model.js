@@ -16,4 +16,25 @@ async function getVehiclesByClassificationId(classificationId) {
     )
 }
 
-module.exports = { getVehicleById, getVehiclesByClassificationId }
+// Inserir nova classificação
+async function addClassification(classification_name) {
+    return pool.query(
+        "INSERT INTO classification (classification_name) VALUES ($1)",
+        [classification_name]
+    )
+}
+
+// Inserir novo veículo
+async function addVehicle(make, model, year, price, classification_id) {
+    return pool.query(
+        "INSERT INTO inventory (inv_make, inv_model, inv_year, inv_price, classification_id) VALUES ($1, $2, $3, $4, $5)",
+        [make, model, year, price, classification_id]
+    )
+}
+
+module.exports = {
+    getVehicleById,
+    getVehiclesByClassificationId,
+    addClassification,
+    addVehicle
+}
