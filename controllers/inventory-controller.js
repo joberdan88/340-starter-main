@@ -79,7 +79,12 @@ async function processAddClassification(req, res) {
 // Show form to add a new vehicle
 async function buildAddVehicle(req, res) {
     const nav = await utilities.getNav()
-    res.render("inventory/add-vehicle", { title: "Add Vehicle", nav })
+    const classificationList = await utilities.buildClassificationList()
+    res.render("inventory/add-vehicle", {
+        title: "Add Vehicle",
+        nav,
+        classificationList
+    })
 }
 
 // Process form submission for new vehicle
@@ -93,12 +98,28 @@ async function processAddVehicle(req, res) {
     }
 
     if (errors.length > 0) {
-        return res.render("inventory/add-vehicle", { title: "Add Vehicle", nav, errors })
+        const classificationList = await utilities.buildClassificationList(classification_id)
+        return res.render("inventory/add-vehicle", {
+            title: "Add Vehicle",
+            nav,
+            errors,
+            make,
+            model,
+            year,
+            price,
+            classification_id,
+            classificationList
+        })
     }
 
     await invModel.addVehicle(make, model, year, price, classification_id)
 
-    res.render("inventory/vehicle-success", { title: "Success", nav, make, model })
+    res.render("inventory/vehicle-success", {
+        title: "Success",
+        nav,
+        make,
+        model
+    })
 }
 
 module.exports = {
