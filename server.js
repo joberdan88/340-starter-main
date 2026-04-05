@@ -37,6 +37,7 @@ const baseRoutes = require("./routes/base-routes")
 app.use("/", baseRoutes)
 
 const invRoutes = require("./routes/inventory-routes")
+// Mantendo o prefixo /inv
 app.use("/inv", invRoutes)
 
 // Local Server Information
