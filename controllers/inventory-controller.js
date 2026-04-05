@@ -1,6 +1,20 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
 
+// Página principal de Inventory Management
+async function buildInventory(req, res, next) {
+    try {
+        const nav = await utilities.getNav()
+        res.render("inventory/management", {
+            title: "Inventory Management",
+            nav,
+            message: "Choose an option below to manage classifications and vehicles."
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 // Build vehicle detail page by vehicle ID
 async function buildById(req, res, next) {
     try {
@@ -88,6 +102,7 @@ async function processAddVehicle(req, res) {
 }
 
 module.exports = {
+    buildInventory,
     buildById,
     buildByClassificationId,
     buildAddClassification,

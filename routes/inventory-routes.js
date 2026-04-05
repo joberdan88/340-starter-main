@@ -2,17 +2,20 @@ const express = require("express")
 const router = new express.Router()
 const invController = require("../controllers/inventory-controller")
 
-// Route details veilcle
+// Página principal de Inventory Management
+router.get("/", invController.buildInventory)
+
+// Route details vehicle
 router.get("/detail/:invId", invController.buildById)
 
-// Route classification veilcle
+// Route classification vehicle
 router.get("/classification/:classificationId", invController.buildByClassificationId)
 
 // report new classification
 router.get("/add-classification", invController.buildAddClassification)
 router.post("/add-classification", invController.processAddClassification)
 
-// report new veilcle
+// report new vehicle
 router.get("/add-vehicle", invController.buildAddVehicle)
 router.post("/add-vehicle", invController.processAddVehicle)
 
