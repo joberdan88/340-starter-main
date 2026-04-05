@@ -1,40 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
+<h1>
+    <%= title %>
+</h1>
+<% if (errors && errors.length> 0) { %>
+    <ul>
+        <% errors.forEach(error=> { %>
+            <li>
+                <%= error %>
+            </li>
+            <% }) %>
+    </ul>
+    <% } %>
 
-<head>
-    <meta charset="UTF-8">
-    <title>
-        <%= title %>
-    </title>
-</head>
-
-<body>
-    <header>
-        <%- nav %>
-    </header>
-
-    <main>
-        <h1>
-            <%= title %>
-        </h1>
-        <% if (errors && errors.length> 0) { %>
-            <ul>
-                <% errors.forEach(error=> { %>
-                    <li>
-                        <%= error %>
-                    </li>
-                    <% }) %>
-            </ul>
-            <% } %>
-
-                <form action="/inv/add-classification" method="post">
-                    <label for="classification_name">Classification Name:</label>
-                    <input type="text" id="classification_name" name="classification_name" pattern="^[A-Za-z]+$"
-                        required>
-                    <p>No spaces or special characters allowed.</p>
-                    <button type="submit">Add Classification</button>
-                </form>
-    </main>
-</body>
-
-</html>
+        <form action="/inv/add-classification" method="post">
+            <label for="classification_name">Classification Name:</label>
+            <input type="text" id="classification_name" name="classification_name" pattern="^[A-Za-z]+$"
+                required>
+            <p>No spaces or special characters allowed.</p>
+            <button type="submit">Add Classification</button>
+        </form>

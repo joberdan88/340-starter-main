@@ -55,12 +55,16 @@ app.use((req, res, next) => {
   next(error)
 })
 
+const utilities = require("./utilities/")
+
 // General error handler
-app.use((err, req, res, next) => {
+app.use(async (err, req, res, next) => {
+  let nav = await utilities.getNav()
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
   res.status(err.status || 500)
   res.render("errors/error", {
-    title: "Error",
+    title: err.status || 'Server Error',
     message: err.message,
-    status: err.status || 500
+    nav
   })
 })

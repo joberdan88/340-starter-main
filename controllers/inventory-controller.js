@@ -54,7 +54,11 @@ async function buildByClassificationId(req, res, next) {
 // Show form to add a new classification
 async function buildAddClassification(req, res) {
     const nav = await utilities.getNav()
-    res.render("inventory/add-classification", { title: "Add Classification", nav })
+    res.render("inventory/add-classification", {
+        title: "Add Classification",
+        nav,
+        errors: null // Pass errors as null initially
+    })
 }
 
 // Process form submission for new classification
@@ -68,12 +72,21 @@ async function processAddClassification(req, res) {
     }
 
     if (errors.length > 0) {
-        return res.render("inventory/add-classification", { title: "Add Classification", nav, errors })
+        return res.render("inventory/add-classification", {
+            title: "Add Classification",
+            nav,
+            errors
+        })
     }
 
     await invModel.addClassification(classification_name)
 
-    res.render("inventory/classification-success", { title: "Success", nav, classification_name })
+    res.render("inventory/classification-success", {
+        title: "Success",
+        nav,
+        classification_name,
+        errors: null
+    })
 }
 
 // Show form to add a new vehicle
@@ -83,7 +96,12 @@ async function buildAddVehicle(req, res) {
     res.render("inventory/add-vehicle", {
         title: "Add Vehicle",
         nav,
-        classificationList
+        classificationList,
+        errors: null,
+        make: "",
+        model: "",
+        year: "",
+        price: ""
     })
 }
 
