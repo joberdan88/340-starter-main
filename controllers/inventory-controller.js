@@ -57,7 +57,7 @@ async function buildAddClassification(req, res) {
     res.render("inventory/add-classification", {
         title: "Add Classification",
         nav,
-        errors: null // Pass errors as null initially
+        errors: null
     })
 }
 
@@ -140,6 +140,28 @@ async function processAddVehicle(req, res) {
     })
 }
 
+// Show form to edit an existing vehicle
+async function buildEditVehicle(req, res) {
+    const nav = await utilities.getNav()
+    const vehicle = await invModel.getVehicleById(req.params.inv_id)
+    const classificationList = await utilities.buildClassificationList(vehicle.rows[0].classification_id)
+
+    res.render("inventory/edit-vehicle", {
+        title: "Edit Vehicle",
+        nav,
+        classificationList,
+        ...vehicle.rows[0],
+        errors: []
+    })
+}
+
+// Process update of an existing vehicle
+async function processUpdateVehicle(req, res) {
+    const { inv_id, make, model, year, price, classification_id } = req.body
+    await invModel.updateVehicle(inv_id, make, model, year, price, classification_id)
+    res.redirect(`/inv/detail/${inv_id}`)
+}
+
 module.exports = {
     buildInventory,
     buildById,
@@ -147,5 +169,7 @@ module.exports = {
     buildAddClassification,
     processAddClassification,
     buildAddVehicle,
-    processAddVehicle
+    processAddVehicle,
+    buildEditVehicle,
+    processUpdateVehicle
 }

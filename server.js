@@ -7,6 +7,11 @@ const env = require("dotenv").config({ path: ".env.sample" })
 const app = express()
 const path = require("path")
 const session = require("express-session") // session support
+const cookieParser = require("cookie-parser")
+app.use(cookieParser())
+
+const checkJWT = require("./utilities/checkJWT")
+app.use("/inv", checkJWT, invRoutes)
 
 // Middleware first
 app.use(express.urlencoded({ extended: true }))

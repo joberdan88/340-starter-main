@@ -1,5 +1,28 @@
 const utilities = require("../utilities/")
 
+
+const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs")
+
+async function loginUser(req, res) {
+    const { email, password } = req.body
+    const user = await accountModel.findUserByEmail(email)
+
+    if (!user || !bcrypt.compareSync(password, user.password)) {
+        return res.render("account/login", { errors: ["Invalid credentials"], nav: await utilities.getNav() })
+    }
+
+    const token = jwt.sign({ userId: user.id, email: user.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" })
+    res.cookie("jwt", token, { httpOnly: true })
+    res.redirect("/inv")
+}
+
+function logoutUser(req, res) {
+    res.clearCookie("jwt")
+    res.redirect("/")
+}
+
+
 async function buildLogin(req, res) {
     const nav = await utilities.getNav()
     const message = req.session.message || null

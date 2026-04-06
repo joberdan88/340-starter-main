@@ -32,6 +32,15 @@ async function addVehicle(make, model, year, price, classification_id) {
     )
 }
 
+async function updateVehicle(inv_id, make, model, year, price, classification_id) {
+    const sql = `
+    UPDATE inventory
+    SET inv_make = $1, inv_model = $2, inv_year = $3, inv_price = $4, classification_id = $5
+    WHERE inv_id = $6
+    RETURNING *`
+    return pool.query(sql, [make, model, year, price, classification_id, inv_id])
+}
+
 module.exports = {
     getVehicleById,
     getVehiclesByClassificationId,

@@ -2,6 +2,17 @@ const express = require("express")
 const router = new express.Router()
 const invController = require("../controllers/inventory-controller")
 
+
+// Rota para abrir formulário de edição
+router.get("/edit/:inv_id", invController.buildEditVehicle)
+
+// Rota para processar atualização
+router.post("/update", invController.processUpdateVehicle)
+
+module.exports = router
+
+
+
 // Página principal de Inventory Management
 router.get("/", invController.buildInventory)
 
