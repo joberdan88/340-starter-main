@@ -162,6 +162,26 @@ async function processUpdateVehicle(req, res) {
     res.redirect(`/inv/detail/${inv_id}`)
 }
 
+
+// Mostrar formulário de exclusão
+async function buildDeleteVehicle(req, res) {
+    const nav = await utilities.getNav()
+    const vehicle = await invModel.getVehicleById(req.params.inv_id)
+
+    res.render("inventory/delete-vehicle", {
+        title: "Delete Vehicle",
+        nav,
+        ...vehicle.rows[0]
+    })
+}
+
+// Processar exclusão
+async function processDeleteVehicle(req, res) {
+    const { inv_id } = req.body
+    await invModel.deleteVehicle(inv_id)
+    res.redirect("/inv")
+}
+
 module.exports = {
     buildInventory,
     buildById,

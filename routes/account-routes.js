@@ -1,13 +1,19 @@
 const express = require("express")
-const router = new express.Router()
+const router = express.Router()
 const accountController = require("../controllers/account-controller")
+const checkJWT = require("../utilities/checkJWT")
 
-router.get("/login", accountController.buildLogin)
-router.post("/login", accountController.processLogin)
+// Account Management
+router.get("/management", checkJWT, accountController.buildManagement)
 
-router.get("/register", accountController.buildRegister)
-router.post("/register", accountController.processRegister)
+// Update account info
+router.get("/update/:account_id", checkJWT, accountController.buildUpdateAccount)
+router.post("/update", checkJWT, accountController.processUpdateAccount)
 
-router.get("/session-message", accountController.buildSessionMessage)
+// Update password
+router.post("/update-password", checkJWT, accountController.processUpdatePassword)
+
+// Logout
+router.get("/logout", accountController.logoutUser)
 
 module.exports = router

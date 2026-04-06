@@ -11,7 +11,11 @@ router.post("/update", invController.processUpdateVehicle)
 
 module.exports = router
 
+// Mostrar formulário de exclusão
+router.get("/delete/:inv_id", invController.buildDeleteVehicle)
 
+// Processar exclusão
+router.post("/delete", invController.processDeleteVehicle)
 
 // Página principal de Inventory Management
 router.get("/", invController.buildInventory)

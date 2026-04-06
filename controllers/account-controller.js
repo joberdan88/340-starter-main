@@ -1,42 +1,52 @@
 const utilities = require("../utilities/")
-
-
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
+const accountModel = require("../models/account-model")
 
-async function loginUser(req, res) {
-    const { email, password } = req.body
-    const user = await accountModel.findUserByEmail(email)
-
-    if (!user || !bcrypt.compareSync(password, user.password)) {
-        return res.render("account/login", { errors: ["Invalid credentials"], nav: await utilities.getNav() })
-    }
-
-    const token = jwt.sign({ userId: user.id, email: user.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" })
-    res.cookie("jwt", token, { httpOnly: true })
-    res.redirect("/inv")
+// Render login form
+async function buildLogin(req, res) {
+    const nav = await utilities.getNav()
+    res.render("account/login", { title: "Login", nav, errors: null })
 }
 
+// Process login
+async function loginUser(req, res) {
+    const { email, password } = req.body
+    const userData = await accountModel.findUserByEmail(email)
+
+    if (!userData || !bcrypt.compareSync(password, userData.password)) {
+        const nav = await utilities.getNav()
+        return res.render("account/login", {
+            title: "Login",
+            nav,
+            errors: ["Invalid credentials"]
+        })
+    }
+
+    // Create JWT
+    const token = jwt.sign(
+        { userId: userData.account_id, email: userData.email, account_type: userData.account_type, first_name: userData.first_name },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "1h" }
+    )
+
+    res.cookie("jwt", token, { httpOnly: true })
+    res.redirect("/account/management")
+}
+
+// Logout
 function logoutUser(req, res) {
     res.clearCookie("jwt")
     res.redirect("/")
 }
 
-
-async function buildLogin(req, res) {
-    const nav = await utilities.getNav()
-    const message = req.session.message || null
-    req.session.message = null // clear after showing
-    res.render("account/login", { title: "Login", nav, message })
-}
-
+// Render registration form
 async function buildRegister(req, res) {
     const nav = await utilities.getNav()
-    const message = req.session.message || null
-    req.session.message = null // clear after showing
-    res.render("account/registration", { title: "Register", nav, message })
+    res.render("account/registration", { title: "Register", nav, errors: null })
 }
 
+// Process registration
 async function processRegister(req, res) {
     const nav = await utilities.getNav()
     const { firstname, lastname, email, password } = req.body || {}
@@ -56,48 +66,58 @@ async function processRegister(req, res) {
         return res.render("account/registration", { title: "Register", nav, errors })
     }
 
-    // Store success message in session
-    req.session.message = `Registration successful for ${firstname} ${lastname}`
-    res.redirect("/account/session-message")
+    const hashedPassword = bcrypt.hashSync(password, 10)
+    await accountModel.registerAccount(firstname, lastname, email, hashedPassword)
+
+    res.redirect("/account/login")
 }
 
-async function processLogin(req, res) {
+// Account Management view
+async function buildManagement(req, res) {
     const nav = await utilities.getNav()
-    const { email, password } = req.body || {}
-
-    let errors = []
-    if (!email || !password) {
-        errors.push("Email and password are required.")
-    }
-    if (password && password.length < 8) {
-        errors.push("Password must be at least 8 characters.")
-    }
-    if (email && !email.includes("@")) {
-        errors.push("Invalid email format.")
-    }
-
-    if (errors.length > 0) {
-        // Redirect to register if login fails
-        req.session.message = "Login failed. Please register."
-        return res.redirect("/account/register")
-    }
-
-    // Store login attempt message in session
-    req.session.message = `Login attempt with email: ${email}`
-    res.redirect("/account/session-message")
+    const user = req.user // vem do JWT
+    res.render("account/management", {
+        title: "Account Management",
+        nav,
+        user
+    })
 }
 
-async function buildSessionMessage(req, res) {
+// Show update account form
+async function buildUpdateAccount(req, res) {
     const nav = await utilities.getNav()
-    const message = req.session.message || "No message found."
-    req.session.message = null // clear after showing
-    res.render("account/session-message", { title: "Message", nav, message })
+    const account = await accountModel.getAccountById(req.params.account_id)
+    res.render("account/update", {
+        title: "Update Account",
+        nav,
+        ...account.rows[0],
+        errors: []
+    })
+}
+
+// Process account update
+async function processUpdateAccount(req, res) {
+    const { account_id, first_name, last_name, email } = req.body
+    await accountModel.updateAccount(account_id, first_name, last_name, email)
+    res.redirect("/account/management")
+}
+
+// Process password update
+async function processUpdatePassword(req, res) {
+    const { account_id, password } = req.body
+    const hashedPassword = bcrypt.hashSync(password, 10)
+    await accountModel.updatePassword(account_id, hashedPassword)
+    res.redirect("/account/management")
 }
 
 module.exports = {
     buildLogin,
+    loginUser,
+    logoutUser,
     buildRegister,
     processRegister,
-    processLogin,
-    buildSessionMessage
+    buildManagement,
+    buildUpdateAccount,
+    processUpdateAccount,
+    processUpdatePassword
 }

@@ -41,6 +41,12 @@ async function updateVehicle(inv_id, make, model, year, price, classification_id
     return pool.query(sql, [make, model, year, price, classification_id, inv_id])
 }
 
+
+async function deleteVehicle(inv_id) {
+    const sql = "DELETE FROM inventory WHERE inv_id = $1"
+    return pool.query(sql, [inv_id])
+}
+
 module.exports = {
     getVehicleById,
     getVehiclesByClassificationId,
